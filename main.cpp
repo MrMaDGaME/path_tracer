@@ -24,14 +24,14 @@ int main() {
     auto camera = new Camera(camera_center, camera_direction, camera_up, atan(tan(FOV) * HEIGHT / WIDTH) + M_PI / 2,
                              FOV,
                              ZMIN);
-    float pixel_size = (2 * tan(camera->getAlpha() / 2) * ZMIN) / WIDTH;
+    float pixel_size = (2 * tan(camera->alpha / 2) * ZMIN) / WIDTH;
     Vector3 left(camera->up._y * camera->direction._z - camera->up._z * camera->direction._y,
                  camera->up._x * camera->direction._z - camera->up._z * camera->direction._x,
                  camera->up._x * camera->direction._y - camera->up._y * camera->direction._x);
     Vector3 right = -left;
     Vector3 down = -camera->up;
     Vector3 upper_left_corner =
-            camera->center + camera->up * (pixel_size * (HEIGHT - 1) / 2) + camera->direction * ZMIN +
+            camera->center + camera->up * (pixel_size * (HEIGHT - 1) / 2) + camera->direction * camera->z +
             left * (pixel_size * (WIDTH - 1) / 2);
     // Random
     std::random_device rd;
@@ -54,18 +54,18 @@ int main() {
     // Image
     std::cout << "Rendering..." << std::endl;
     Image image(WIDTH, HEIGHT);
-    for (float j = 0; j < HEIGHT; j++) {
-        for (float i = 0; i < WIDTH; i++) {
+    for (int j = 0; j < HEIGHT; j++) {
+        for (int i = 0; i < WIDTH; i++) {
             float r = 0, g = 0, b = 0;
-            for (float k = 0; k < ANTIALIASING; k++) {
+            for (int k = 0; k < ANTIALIASING; k++) {
                 float x = ANTIALIASING == 1 ? 0 : dis(gen);
                 float y = ANTIALIASING == 1 ? 0 : dis(gen);
-                Vector3 pixel = upper_left_corner + right * ((i * pixel_size) + x) +
-                                down * ((j * pixel_size) + y);
+                Vector3 pixel = upper_left_corner + right * ((static_cast<float>(i) * pixel_size) + x) +
+                                down * ((static_cast<float>(j) * pixel_size) + y);
                 Color tmp_color = scene.get_pixel_color(pixel, pixel - camera->center, MAX_REFLECTION);
-                r = (r / (k + 1) * k + tmp_color._r / (k + 1));
-                g = (g / (k + 1) * k + tmp_color._g / (k + 1));
-                b = (b / (k + 1) * k + tmp_color._b / (k + 1));
+                r = (r / static_cast<float>(k + 1) * static_cast<float>(k) + tmp_color._r / static_cast<float>(k + 1));
+                g = (g / static_cast<float>(k + 1) * static_cast<float>(k) + tmp_color._g / static_cast<float>(k + 1));
+                b = (b / static_cast<float>(k + 1) * static_cast<float>(k) + tmp_color._b / static_cast<float>(k + 1));
             }
             image.set_pixel(i, j, Color(r, g, b));
         }

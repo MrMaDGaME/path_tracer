@@ -10,6 +10,8 @@ class SphereLight : public Light {
 public:
     Vector3 getPosition();
 
+    float getRadius() const;
+
     float raycast_hit(Vector3 point, Vector3 direction) override;
 
     SphereLight(const Vector3 &position, const Color &color, float radius);

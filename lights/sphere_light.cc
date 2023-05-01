@@ -10,3 +10,7 @@ Vector3 SphereLight::getPosition() {
 float SphereLight::raycast_hit(Vector3 point, Vector3 direction) {
     return sphere_raycast_hit(point, direction, position, radius);
 }
+
+float SphereLight::getRadius() const {
+    return radius;
+}

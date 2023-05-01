@@ -16,3 +16,5 @@ public:
 protected:
     float a, b, c, d;
 };
+
+float plane_raycast_hit(Vector3 point, Vector3 direction, float a, float b, float c, float d);
