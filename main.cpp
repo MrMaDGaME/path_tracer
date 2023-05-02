@@ -13,7 +13,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 #define ZMIN 1
-#define MIN_TIME 10
+#define MIN_TIME 3600
 
 int main() {
     // Variables
@@ -42,13 +42,15 @@ int main() {
     Scene scene(camera);
     // Objects
     scene.addObject(
-            new Plane(0, 1, 0, 0, new Uniform_Texture(1, 0, 30, true, Color(100, 255, 100))));
+            new Plane(0, 1, 0, 0, new Uniform_Texture(0.1, 0.9, 10, true, Color(100, 255, 100))));
+//    scene.addObject(
+//            new Plane(0, 1, 0, -2, new Uniform_Texture(0.1, 0.9, 10, true, Color(100, 100, 100))));
     scene.addObject(new Sphere(Vector3(10, 1, -2), 1,
                                new Uniform_Texture(0.9, 0.1, 15, true, Color(0, 0, 255))));
     scene.addObject(new Sphere(Vector3(10, 1, 2), 1,
                                new Uniform_Texture(0.9, 0.1, 15, true, Color(255, 0, 0))));
-//    scene.addObject(new Sphere(Vector3(0, 0, 0), 100,
-//                               new Uniform_Texture(0.1, 0.9, 15, true, Color(150, 150, 255))));
+    scene.addObject(new Sphere(Vector3(5, 0, 0), 8,
+                               new Uniform_Texture(0.1, 0.9, 15, true, Color(150, 150, 150))));
     // lights
     scene.addLight(new SphereLight(Vector3(10, 1, 0), Color(255, 255, 255), 1));
 //    scene.addLight(new PlaneLight(Vector3(0, 10, 0), Vector3(0, -1, 0), Color(255, 255, 255)));
