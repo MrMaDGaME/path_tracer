@@ -14,7 +14,7 @@ float Sphere::raycast_hit(Vector3 point, Vector3 direction) {
 }
 
 Vector3 Sphere::get_normal(Vector3 point) {
-    return point - center;
+    return (point - center).normalize();
 }
 
 Texture_Material::Texture Sphere::get_texture(Vector3 point) {

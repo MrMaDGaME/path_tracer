@@ -12,6 +12,8 @@ public:
 
     void set_pixel(unsigned int x, unsigned int y, const Color &color);
 
+    void add_color(unsigned int x, unsigned int y, const Color &color);
+
 protected:
     int height, width;
     std::vector<Color> map;

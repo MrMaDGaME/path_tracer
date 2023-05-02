@@ -16,13 +16,13 @@ public:
 
     void addLight(SphereLight *light);
 
-    float get_hit(Vector3 point, Vector3 direction, Object *&current_obj);
+    Vector3 get_direct_hit(Vector3 point, Vector3 direction, Object *&current_obj, Light *&current_light);
 
-    Color getLight(Vector3 point, SphereLight *light);
+    float get_object_hit(Vector3 point, Vector3 direction, Object *&current_obj);
 
-    Vector3 get_direct_hit(Vector3 point, Vector3 direction, Object *&current_obj);
+    float get_light_hit(Vector3 point, Vector3 direction, Light *&current_light);
 
-    Color get_pixel_color(Vector3 point, Vector3 direction, int max_depth);
+    Color get_pixel_color(Vector3 point, Vector3 direction, Color total_filter);
 
     std::vector<Object *> objects;
     std::vector<SphereLight *> lights;

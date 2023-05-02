@@ -32,3 +32,7 @@ void Image::to_ppm(const std::string &path) const {
 void Image::set_pixel(unsigned int x, unsigned int y, const Color &color) {
     map[y * width + x] = color;
 }
+
+void Image::add_color(unsigned int x, unsigned int y, const Color &color) {
+    map[y * width + x] += color;
+}

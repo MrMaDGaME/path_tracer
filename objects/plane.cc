@@ -8,7 +8,7 @@ float Plane::raycast_hit(Vector3 point, Vector3 direction) {
 }
 
 Vector3 Plane::get_normal(Vector3 point) {
-    return {a, b, c};
+    return Vector3(a, b, c).normalize();
 }
 
 Texture_Material::Texture Plane::get_texture(Vector3 point) {

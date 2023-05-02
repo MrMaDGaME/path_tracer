@@ -12,8 +12,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 #define ZMIN 1
-#define MAX_REFLECTION 5
-#define ANTIALIASING 1
+#define MIN_TIME 10
 
 int main() {
     // Variables
@@ -42,34 +41,37 @@ int main() {
     Scene scene(camera);
     // Objects
     scene.addObject(
-            new Plane(0, 1, 0, 0, new Uniform_Texture(1, 1, 30, 0, true, Color(100, 255, 100))));
+            new Plane(0, 1, 0, 0, new Uniform_Texture(1, 0, 30, true, Color(100, 255, 100))));
     scene.addObject(new Sphere(Vector3(10, 1.5, -1.5), 1,
-                               new Uniform_Texture(0.4, 0.9, 15, 0.9, true, Color(255, 255, 255))));
+                               new Uniform_Texture(0.9, 0.1, 15, true, Color(255, 255, 255))));
     scene.addObject(new Sphere(Vector3(10, 1.5, 1.5), 1,
-                               new Uniform_Texture(0.4, 0.9, 15, 0.1, true, Color(255, 0, 0))));
+                               new Uniform_Texture(0.9, 0.1, 15, true, Color(255, 0, 0))));
     scene.addObject(new Sphere(Vector3(0, 0, 0), 100,
-                               new Uniform_Texture(0.4, 0.9, 15, 0.1, true, Color(150, 150, 255))));
+                               new Uniform_Texture(0.1, 0.9, 15, true, Color(150, 150, 255))));
     // lights
     scene.addLight(new SphereLight(Vector3(5, 5, 0), Color(255, 255, 255), 0.5));
     // Image
     std::cout << "Rendering..." << std::endl;
     Image image(WIDTH, HEIGHT);
-    for (int j = 0; j < HEIGHT; j++) {
-        for (int i = 0; i < WIDTH; i++) {
-            float r = 0, g = 0, b = 0;
-            for (int k = 0; k < ANTIALIASING; k++) {
-                float x = ANTIALIASING == 1 ? 0 : dis(gen);
-                float y = ANTIALIASING == 1 ? 0 : dis(gen);
+    std::time_t start = std::time(nullptr);
+    while (true) {
+        if (std::time(nullptr) - start > MIN_TIME) {
+            break;
+        }
+        for (int j = 0; j < HEIGHT; j++) {
+            for (int i = 0; i < WIDTH; i++) {
+                float x = dis(gen);
+                float y = dis(gen);
                 Vector3 pixel = upper_left_corner + right * ((static_cast<float>(i) * pixel_size) + x) +
                                 down * ((static_cast<float>(j) * pixel_size) + y);
-                Color tmp_color = scene.get_pixel_color(pixel, pixel - camera->center, MAX_REFLECTION);
-                r = (r / static_cast<float>(k + 1) * static_cast<float>(k) + tmp_color._r / static_cast<float>(k + 1));
-                g = (g / static_cast<float>(k + 1) * static_cast<float>(k) + tmp_color._g / static_cast<float>(k + 1));
-                b = (b / static_cast<float>(k + 1) * static_cast<float>(k) + tmp_color._b / static_cast<float>(k + 1));
+                std::cout << "Pixel: " << i << " " << j << std::endl;
+                Color pixel_color = scene.get_pixel_color(pixel, pixel - camera->center,
+                                                          {MAX_COLOR, MAX_COLOR, MAX_COLOR});
+                image.add_color(i, j, pixel_color);
             }
-            image.set_pixel(i, j, Color(r, g, b));
         }
     }
+    std::cout << "Saving image..." << std::endl;
     image.to_ppm("../result.ppm");
     return 0;
 }

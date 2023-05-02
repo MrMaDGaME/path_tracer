@@ -22,10 +22,26 @@ void Scene::addLight(SphereLight *light) {
     lights.push_back(light);
 }
 
-float Scene::get_hit(Vector3 point, Vector3 direction, Object *&current_obj) {
+Vector3 Scene::get_direct_hit(Vector3 point, Vector3 direction, Object *&current_obj, Light *&current_light) {
+    Object *tmp_obj = nullptr;
+    Light *tmp_light = nullptr;
+    float object_min_t = get_object_hit(point, direction, tmp_obj);
+    float light_min_t = get_light_hit(point, direction, tmp_light);
+    if (object_min_t < light_min_t || (object_min_t > 0 && light_min_t <= 0)) {
+        current_obj = tmp_obj;
+        return point + direction * (object_min_t - EPSILON);
+    }
+    if (light_min_t < object_min_t || (light_min_t > 0 && object_min_t <= 0)) {
+        current_light = tmp_light;
+        return point + direction * (light_min_t - EPSILON);
+    }
+    throw std::runtime_error("No object or light found");
+}
+
+float Scene::get_object_hit(Vector3 point, Vector3 direction, Object *&current_obj) {
     float min_t = -1;
     Object *min_obj = nullptr;
-    for (auto object: objects) {
+    for (Object *object: objects) {
         float t = object->raycast_hit(point, direction);
         if (t > 0 && (t < min_t || min_t == -1)) {
             min_t = t;
@@ -39,56 +55,55 @@ float Scene::get_hit(Vector3 point, Vector3 direction, Object *&current_obj) {
     return -1;
 }
 
-Color Scene::getLight(Vector3 point, SphereLight *light) {
-    Color result = light->getColor();
-    for (auto object: objects) {
-        float t = object->raycast_hit(point, light->getPosition() - point);
-        if (t > 0 && t < 1) {
-            if (object->get_texture(point + (light->getPosition() - point) * t).is_opaque) {
-                return {0, 0, 0};
-            }
-            result._r *= object->get_texture(point).color._r / 255;
-            result._g *= object->get_texture(point).color._g / 255;
-            result._b *= object->get_texture(point).color._b / 255;
+float Scene::get_light_hit(Vector3 point, Vector3 direction, Light *&current_light) {
+    float min_t = -1;
+    Light *min_light = nullptr;
+    for (auto light: lights) {
+        float t = light->raycast_hit(point, direction);
+        if (t > 0 && (t < min_t || min_t == -1)) {
+            min_t = t;
+            min_light = light;
         }
     }
-    return result;
-}
-
-Vector3 Scene::get_direct_hit(Vector3 point, Vector3 direction, Object *&current_obj) {
-    float min_t = get_hit(point, direction, current_obj);
     if (min_t > 0) {
-        return point + direction * (min_t - EPSILON);
+        current_light = min_light;
+        return min_t;
     }
-    throw std::runtime_error("No object found");
+    return -1;
 }
 
-Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, int max_depth) {
-    if (max_depth <= -1)
+Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filter) {
+    // If the ray has bounced too many times, no more light is gathered.
+    if (total_filter < Color(0.5, 0.5, 0.5))
         return {0, 0, 0};
     Object *current_obj = nullptr;
-    Color pixel_color;
+    Light *current_light = nullptr;
     try {
-        Vector3 hit_point = get_direct_hit(pixel, direction, current_obj);
-        Texture_Material::Texture texture = current_obj->get_texture(hit_point);
-        Color total_light;
-        for (auto light: lights) {
-            Vector3 normal = current_obj->get_normal(hit_point).normalize();
+        Vector3 hit_point = get_direct_hit(pixel, direction, current_obj, current_light);
+        if (current_light == nullptr && current_obj == nullptr) {
+        }
+        if (current_light != nullptr) {
+            return current_light->getColor();
+        } else {
+            // Random light_direction
+            Vector3 normal = current_obj->get_normal(hit_point);
             if (normal * direction > 0)
                 normal = -normal;
-            Vector3 light_direction = (light->getPosition() - hit_point).normalize();
-            Vector3 reflection = direction.get_reflection(normal).normalize();
-            total_light += get_pixel_color(hit_point, reflection, max_depth - 1) * texture.shine +
-                           getLight(hit_point, light) * (texture.kd * (normal * light_direction) +
-                                                         texture.ks *
-                                                         (pow(reflection * light_direction,
-                                                              texture.ns)));
+            Vector3 light_direction = direction.get_reflection(normal).normalize();
+            // Compute the filter of the incoming light
+            Texture_Material::Texture texture = current_obj->get_texture(hit_point);
+            Color filter = (texture.color / 255.0f) * (texture.kd * std::max((normal * light_direction), 0.0f) +
+                                                       texture.ks *
+                                                       (pow(std::max(direction.get_reflection(normal).normalize() *
+                                                                     light_direction, 0.0f),
+                                                            texture.ns)));
+            // Get the incoming light
+            Color incoming_light = get_pixel_color(hit_point, light_direction, total_filter * filter);
+            // Render the object color
+            Color pixel_color = incoming_light * filter;
+            return pixel_color;
         }
-        pixel_color._r = texture.color._r / 255.0f * total_light._r;
-        pixel_color._g = texture.color._g / 255.0f * total_light._g;
-        pixel_color._b = texture.color._b / 255.0f * total_light._b;
     } catch (std::runtime_error &e) {
         return {0, 0, 0};
     }
-    return pixel_color;
 }

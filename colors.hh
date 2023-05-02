@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-#define MAX_COLOR 255
+#define MAX_COLOR 255.0f
 
 class Color {
 public:
@@ -18,9 +18,13 @@ public:
 
     Color operator+=(const Color &color);
 
+    bool operator==(const Color &color) const;
+
+    bool operator<(const Color &color) const;
+
+    Color operator*(const Color &color) const;
+
     friend std::ostream &operator<<(std::ostream &os, const Color &color);
 
     float _r, _g, _b;
 };
-
-float min(float a, float b);
