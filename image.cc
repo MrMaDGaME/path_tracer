@@ -29,10 +29,15 @@ void Image::to_ppm(const std::string &path) const {
     myfile.close();
 }
 
-void Image::set_pixel(unsigned int x, unsigned int y, const Color &color) {
+[[maybe_unused]] void Image::set_pixel(unsigned int x, unsigned int y, const Color &color) {
     map[y * width + x] = color;
 }
 
-void Image::add_color(unsigned int x, unsigned int y, const Color &color) {
+[[maybe_unused]] void Image::add_color(unsigned int x, unsigned int y, const Color &color) {
     map[y * width + x] += color;
+}
+
+[[maybe_unused]] void Image::avegrage_color(unsigned int x, unsigned int y, const Color &color, int n) {
+    auto nf = static_cast<float>(n);
+    map[y * width + x] = (map[y * width + x] * nf + color) / (nf + 1);
 }

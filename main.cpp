@@ -13,7 +13,7 @@
 #define WIDTH 1920
 #define HEIGHT 1080
 #define ZMIN 1
-#define MIN_TIME 3600
+#define MIN_TIME 10
 
 int main() {
     // Variables
@@ -53,16 +53,16 @@ int main() {
                                new Uniform_Texture(0.1, 0.9, 15, true, Color(150, 150, 150))));
     // lights
     scene.addLight(new SphereLight(Vector3(10, 1, 0), Color(255, 255, 255), 1));
-//    scene.addLight(new PlaneLight(Vector3(0, 10, 0), Vector3(0, -1, 0), Color(255, 255, 255)));
+    scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
     // Image
     std::cout << "Rendering..." << std::endl;
     Image image(WIDTH, HEIGHT);
-    std::time_t start = std::time(nullptr);
     int nb_frames = 0;
+    std::time_t start = std::time(nullptr);
     while (true) {
-        if (std::time(nullptr) - start > MIN_TIME) {
+        /*if (std::time(nullptr) - start > MIN_TIME) {
             break;
-        }
+        }*/
         for (int j = 0; j < HEIGHT; j++) {
             for (int i = 0; i < WIDTH; i++) {
                 auto x = static_cast<float>(dis(gen));
@@ -71,13 +71,15 @@ int main() {
                                 down * ((static_cast<float>(j) * pixel_size) + y);
                 Color pixel_color = scene.get_pixel_color(pixel, (pixel - camera->center).normalize(),
                                                           {MAX_COLOR, MAX_COLOR, MAX_COLOR});
-                image.add_color(i, j, pixel_color);
+                image.avegrage_color(i, j, pixel_color, nb_frames);
             }
         }
         nb_frames++;
+//        image.to_ppm("../results/all_frames_d*d/frame" + std::to_string(nb_frames) + ".ppm");
+        image.to_ppm("../result.ppm");
+        std::cout << "Render time : " << std::time(nullptr) - start << "s" << std::endl;
     }
-    std::cout << nb_frames << " frames rendered." << std::endl;
-    std::cout << "Saving image..." << std::endl;
-    image.to_ppm("../result.ppm");
+//    std::cout << nb_frames << " frames rendered." << std::endl;
+//    std::cout << "Saving image..." << std::endl;
     return 0;
 }

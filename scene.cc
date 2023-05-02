@@ -108,7 +108,7 @@ Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filte
                                                        texture.ks *
                                                        (pow(std::max(direction.get_reflection(normal).normalize() *
                                                                      light_direction, 0.0f),
-                                                            texture.ns))) /** attenuation*/;
+                                                            texture.ns))) * attenuation;
             // Get the incoming light
             Color incoming_light = get_pixel_color(hit_point, light_direction, total_filter * filter);
             // Render the object color
