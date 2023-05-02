@@ -21,6 +21,8 @@ public:
 
     Vector3 normalize() const;
 
+    float norm() const;
+
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &vector3);
 
     Vector3 get_reflection(const Vector3 &normal) const;

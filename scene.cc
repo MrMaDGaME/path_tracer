@@ -18,7 +18,7 @@ Scene::~Scene() {
     delete camera;
 }
 
-void Scene::addLight(SphereLight *light) {
+void Scene::addLight(Light *light) {
     lights.push_back(light);
 }
 
@@ -27,11 +27,11 @@ Vector3 Scene::get_direct_hit(Vector3 point, Vector3 direction, Object *&current
     Light *tmp_light = nullptr;
     float object_min_t = get_object_hit(point, direction, tmp_obj);
     float light_min_t = get_light_hit(point, direction, tmp_light);
-    if (object_min_t < light_min_t || (object_min_t > 0 && light_min_t <= 0)) {
+    if (object_min_t > 0 && (object_min_t < light_min_t || light_min_t <= 0)) {
         current_obj = tmp_obj;
         return point + direction * (object_min_t - EPSILON);
     }
-    if (light_min_t < object_min_t || (light_min_t > 0 && object_min_t <= 0)) {
+    if (light_min_t > 0 && (light_min_t < object_min_t || object_min_t <= 0)) {
         current_light = tmp_light;
         return point + direction * (light_min_t - EPSILON);
     }
@@ -89,14 +89,26 @@ Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filte
             Vector3 normal = current_obj->get_normal(hit_point);
             if (normal * direction > 0)
                 normal = -normal;
-            Vector3 light_direction = direction.get_reflection(normal).normalize();
+            // Random
+            std::random_device rd;
+            std::mt19937 gen(rd());
+            std::uniform_real_distribution<> dis(-1, 1);
+            Vector3 light_direction = Vector3(static_cast<float>(dis(gen)), static_cast<float>(dis(gen)),
+                                              static_cast<float>(dis(gen))).normalize();
+            if (light_direction * normal < 0)
+                light_direction = -light_direction;
             // Compute the filter of the incoming light
+            float d = (pixel - hit_point).norm();
+            // constant factors for attenuation
+            Vector3 k = {0.25, 0.01, 0.001};
+            // compute attenuation factor based on distance
+            float attenuation = 1.0f / (k._x + k._y * d + k._z * d * d);
             Texture_Material::Texture texture = current_obj->get_texture(hit_point);
             Color filter = (texture.color / 255.0f) * (texture.kd * std::max((normal * light_direction), 0.0f) +
                                                        texture.ks *
                                                        (pow(std::max(direction.get_reflection(normal).normalize() *
                                                                      light_direction, 0.0f),
-                                                            texture.ns)));
+                                                            texture.ns))) * attenuation;
             // Get the incoming light
             Color incoming_light = get_pixel_color(hit_point, light_direction, total_filter * filter);
             // Render the object color

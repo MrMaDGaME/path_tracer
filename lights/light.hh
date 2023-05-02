@@ -8,6 +8,8 @@ class Light {
 public :
     virtual float raycast_hit(Vector3 point, Vector3 direction) = 0;
 
+    virtual ~Light() = default;
+
     Color getColor() const {
         return color;
     }

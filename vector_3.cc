@@ -36,3 +36,7 @@ Vector3 Vector3::normalize() const {
 Vector3 Vector3::get_reflection(const Vector3 &normal) const {
     return *this - normal * (2 * (*this * normal));
 }
+
+float Vector3::norm() const {
+    return sqrt(_x * _x + _y * _y + _z * _z);
+}

@@ -2,8 +2,9 @@
 
 #include <iostream>
 #include <vector>
+#include <random>
 #include "objects/object.hh"
-#include "lights/sphere_light.hh"
+#include "lights/light.hh"
 #include "camera.hh"
 
 class Scene {
@@ -14,7 +15,7 @@ public:
 
     void addObject(Object *object);
 
-    void addLight(SphereLight *light);
+    void addLight(Light *light);
 
     Vector3 get_direct_hit(Vector3 point, Vector3 direction, Object *&current_obj, Light *&current_light);
 
@@ -25,6 +26,6 @@ public:
     Color get_pixel_color(Vector3 point, Vector3 direction, Color total_filter);
 
     std::vector<Object *> objects;
-    std::vector<SphereLight *> lights;
+    std::vector<Light *> lights;
     Camera *camera = nullptr;
 };
