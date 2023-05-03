@@ -4,8 +4,6 @@
 #include "light.hh"
 #include "../objects/plane.hh"
 
-#define EPSILON 0.01f
-
 class PlaneLight : public Light {
 public:
     PlaneLight(const Vector3 &position, const Vector3 &normal, const Color &color);

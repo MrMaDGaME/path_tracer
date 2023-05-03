@@ -5,7 +5,9 @@
 
 class Plane : public Object {
 public:
-    Plane(float a, float b, float c, float d, Texture_Material *texture);
+    [[maybe_unused]] Plane(float a, float b, float c, float d, Texture_Material *texture);
+
+    [[maybe_unused]] Plane(Vector3 point, Vector3 normal, Texture_Material *texture);
 
     float raycast_hit(Vector3 point, Vector3 direction) override;
 

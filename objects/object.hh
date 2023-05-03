@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "../texture_material.hh"
-#include "../uniform_texture.hh"
+#include "../textures/texture_material.hh"
+#include "../textures/uniform_texture.hh"
 #include "../vector_3.hh"
 
 class Object {

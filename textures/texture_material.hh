@@ -1,7 +1,7 @@
 #pragma once
 
 #include <iostream>
-#include "colors.hh"
+#include "../colors.hh"
 
 class Texture_Material {
 public:

@@ -41,3 +41,9 @@ void Image::to_ppm(const std::string &path) const {
     auto nf = static_cast<float>(n);
     map[y * width + x] = (map[y * width + x] * nf + color) / (nf + 1);
 }
+
+[[maybe_unused]] void Image::get_max(unsigned int x, unsigned int y, const Color &color) {
+    map[y * width + x]._r = std::max(map[y * width + x]._r, color._r);
+    map[y * width + x]._g = std::max(map[y * width + x]._g, color._g);
+    map[y * width + x]._b = std::max(map[y * width + x]._b, color._b);
+}

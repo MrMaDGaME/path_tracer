@@ -44,17 +44,19 @@ int main() {
     scene.addObject(
             new Plane(0, 1, 0, 0, new Uniform_Texture(0.1, 0.9, 10, true, Color(100, 255, 100))));
 //    scene.addObject(
-//            new Plane(0, 1, 0, -2, new Uniform_Texture(0.1, 0.9, 10, true, Color(100, 100, 100))));
-    scene.addObject(new Sphere(Vector3(10, 1, -2), 1,
-                               new Uniform_Texture(0.9, 0.1, 15, true, Color(0, 0, 255))));
-    scene.addObject(new Sphere(Vector3(10, 1, 2), 1,
-                               new Uniform_Texture(0.9, 0.1, 15, true, Color(255, 0, 0))));
-    scene.addObject(new Sphere(Vector3(5, 0, 0), 8,
-                               new Uniform_Texture(0.1, 0.9, 15, true, Color(150, 150, 150))));
+//            new Plane({-1, 0, 0}, {1, 0, 0}, new Uniform_Texture(0.1, 0.9, 10, true, Color(255, 255, 255))));
+    scene.addObject(
+            new Plane({10, 0, 2}, {-1, 0, -1}, new Uniform_Texture(0.9, 0.1, 200, true, Color(255, 255, 255))));
+    scene.addObject(new Sphere(Vector3(10, 0.5, -2), 0.5,
+                               new Uniform_Texture(0.9, 0.1, 50, true, Color(0, 0, 255))));
+    scene.addObject(new Sphere(Vector3(10, 2.5, -2), 0.5,
+                               new Uniform_Texture(0.9, 0.1, 50, true, Color(255, 0, 0))));
+    scene.addObject(new Sphere(Vector3(0, 0, 0), 15,
+                               new Uniform_Texture(0.1, 0.9, 10, true, Color(150, 150, 150))));
     // lights
-    scene.addLight(new SphereLight(Vector3(10, 1, 0), Color(255, 255, 255), 1));
+    scene.addLight(new SphereLight(Vector3(10, 1.5, -2), Color(255, 255, 255), 0.5));
     scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
-    // Image
+//     Image
     std::cout << "Rendering..." << std::endl;
     Image image(WIDTH, HEIGHT);
     int nb_frames = 0;
@@ -71,12 +73,12 @@ int main() {
                                 down * ((static_cast<float>(j) * pixel_size) + y);
                 Color pixel_color = scene.get_pixel_color(pixel, (pixel - camera->center).normalize(),
                                                           {MAX_COLOR, MAX_COLOR, MAX_COLOR});
-                image.avegrage_color(i, j, pixel_color, nb_frames);
+                image.get_max(i, j, pixel_color);
             }
         }
         nb_frames++;
-//        image.to_ppm("../results/all_frames_d*d/frame" + std::to_string(nb_frames) + ".ppm");
-        image.to_ppm("../result.ppm");
+//        image.to_ppm("../results/all_frames/frame" + std::to_string(nb_frames) + ".ppm");
+        image.to_ppm("../results/scene_3.ppm");
         std::cout << "Render time : " << std::time(nullptr) - start << "s" << std::endl;
     }
 //    std::cout << nb_frames << " frames rendered." << std::endl;

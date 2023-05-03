@@ -1,7 +1,14 @@
 #include "plane.hh"
 
-Plane::Plane(float a, float b, float c, float d, Texture_Material *texture) : Object(texture), a(a),
-                                                                              b(b), c(c), d(d) {}
+[[maybe_unused]] Plane::Plane(float a, float b, float c, float d, Texture_Material *texture) : Object(texture), a(a),
+                                                                                               b(b), c(c), d(d) {}
+
+[[maybe_unused]] Plane::Plane(Vector3 point, Vector3 normal, Texture_Material *texture) : Object(texture), a(normal._x),
+                                                                                          b(normal._y),
+                                                                                          c(normal._z),
+                                                                                          d(-normal._x * point._x -
+                                                                                            normal._y * point._y -
+                                                                                            normal._z * point._z) {}
 
 float Plane::raycast_hit(Vector3 point, Vector3 direction) {
     return plane_raycast_hit(point, direction, a, b, c, d);
