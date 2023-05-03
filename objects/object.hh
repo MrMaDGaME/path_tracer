@@ -11,14 +11,14 @@ public:
 
     virtual Vector3 get_normal(Vector3 point) = 0;
 
-    virtual Texture_Material::Texture get_texture(Vector3 point) = 0;
+    virtual TextureMaterial::Texture *get_texture(Vector3 point) = 0;
 
     virtual ~Object() {
         delete texture;
     }
 
 protected:
-    explicit Object(Texture_Material *texture) : texture(texture) {}
+    explicit Object(TextureMaterial *texture) : texture(texture) {}
 
-    Texture_Material *texture;
+    TextureMaterial *texture;
 };

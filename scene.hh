@@ -6,10 +6,13 @@
 #include "objects/object.hh"
 #include "lights/light.hh"
 #include "camera.hh"
+#include "textures/mirror_texture.hh"
 
 class Scene {
 public:
     explicit Scene(Camera *camera);
+
+    Scene(Camera *camera, const Color &ambientColor);
 
     virtual ~Scene();
 
@@ -23,9 +26,12 @@ public:
 
     float get_light_hit(Vector3 point, Vector3 direction, Light *&current_light);
 
-    Color get_pixel_color(Vector3 point, Vector3 direction, Color total_filter);
+    Color get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filter);
+
+    static Vector3 get_light_direction(Vector3 previous_direction, Vector3 normal, TextureMaterial::Texture *texture);
 
     std::vector<Object *> objects;
     std::vector<Light *> lights;
     Camera *camera = nullptr;
+    Color ambient_color = Color(0, 0, 0);
 };

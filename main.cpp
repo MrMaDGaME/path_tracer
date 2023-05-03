@@ -8,6 +8,7 @@
 #include "image.hh"
 #include "lights/sphere_light.hh"
 #include "lights/plane_light.hh"
+#include "textures/mirror_texture.hh"
 
 #define FOV (120 * M_PI / 180)
 #define WIDTH 1920
@@ -42,17 +43,17 @@ int main() {
     Scene scene(camera);
     // Objects
     scene.addObject(
-            new Plane(0, 1, 0, 0, new Uniform_Texture(0.1, 0.9, 10, true, Color(100, 255, 100))));
-//    scene.addObject(
-//            new Plane({-1, 0, 0}, {1, 0, 0}, new Uniform_Texture(0.1, 0.9, 10, true, Color(255, 255, 255))));
+            new Plane(0, 1, 0, 0, new UniformTexture(0.1, 0.9, 10, true, Color(100, 255, 100))));
     scene.addObject(
-            new Plane({10, 0, 2}, {-1, 0, -1}, new Uniform_Texture(0.9, 0.1, 200, true, Color(255, 255, 255))));
+            new Plane({-1, 0, 0}, {1, 0, 0}, new UniformTexture(0.1, 0.9, 10, true, Color(255, 255, 255))));
+    scene.addObject(
+            new Plane({10, 0, 2}, {-1, 0, -1}, new UniformTexture(new MirrorTexture())));
     scene.addObject(new Sphere(Vector3(10, 0.5, -2), 0.5,
-                               new Uniform_Texture(0.9, 0.1, 50, true, Color(0, 0, 255))));
+                               new UniformTexture(0.9, 0.1, 50, true, Color(0, 0, 255))));
     scene.addObject(new Sphere(Vector3(10, 2.5, -2), 0.5,
-                               new Uniform_Texture(0.9, 0.1, 50, true, Color(255, 0, 0))));
+                               new UniformTexture(0.9, 0.1, 50, true, Color(255, 0, 0))));
     scene.addObject(new Sphere(Vector3(0, 0, 0), 15,
-                               new Uniform_Texture(0.1, 0.9, 10, true, Color(150, 150, 150))));
+                               new UniformTexture(0.1, 0.9, 10, true, Color(150, 150, 150))));
     // lights
     scene.addLight(new SphereLight(Vector3(10, 1.5, -2), Color(255, 255, 255), 0.5));
     scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
@@ -78,7 +79,7 @@ int main() {
         }
         nb_frames++;
 //        image.to_ppm("../results/all_frames/frame" + std::to_string(nb_frames) + ".ppm");
-        image.to_ppm("../results/scene_3.ppm");
+        image.to_ppm("../results/tmp.ppm");
         std::cout << "Render time : " << std::time(nullptr) - start << "s" << std::endl;
     }
 //    std::cout << nb_frames << " frames rendered." << std::endl;

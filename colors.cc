@@ -44,3 +44,11 @@ Color Color::operator*(const Color &color) const {
 bool Color::operator<(const Color &color) const {
     return _r < color._r && _g < color._g && _b < color._b;
 }
+
+Color Color::proportionnal_product(const float f) const {
+    float max = std::max(_r, std::max(_g, _b));
+    if (max * f > MAX_COLOR) {
+        return {MAX_COLOR * _r / max, MAX_COLOR * _g / max, MAX_COLOR * _b / max};
+    }
+    return {_r * f, _g * f, _b * f};
+}

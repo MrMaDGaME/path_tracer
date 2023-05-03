@@ -1,9 +1,9 @@
 #include "sphere.hh"
 #include <cmath>
 
-Sphere::Sphere(const Vector3 &center, float radius, Texture_Material *texture) : Object(texture),
-                                                                                 center(center),
-                                                                                 radius(radius) {}
+Sphere::Sphere(const Vector3 &center, float radius, TextureMaterial *texture) : Object(texture),
+                                                                                center(center),
+                                                                                radius(radius) {}
 
 float square(float x) {
     return x * x;
@@ -17,7 +17,7 @@ Vector3 Sphere::get_normal(Vector3 point) {
     return (point - center).normalize();
 }
 
-Texture_Material::Texture Sphere::get_texture(Vector3 point) {
+TextureMaterial::Texture *Sphere::get_texture(Vector3 point) {
     return texture->get_texture(point._x, point._y, point._z);
 }
 

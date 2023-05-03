@@ -4,6 +4,8 @@
 
 Scene::Scene(Camera *camera) : camera(camera) {}
 
+Scene::Scene(Camera *camera, const Color &ambientColor) : camera(camera), ambient_color(ambientColor) {}
+
 void Scene::addObject(Object *object) {
     objects.push_back(object);
 }
@@ -35,7 +37,7 @@ Vector3 Scene::get_direct_hit(Vector3 point, Vector3 direction, Object *&current
         current_light = tmp_light;
         return point + direction * (light_min_t - EPSILON);
     }
-    throw std::runtime_error("No object or light found");
+    throw std::logic_error("No object or light found");
 }
 
 float Scene::get_object_hit(Vector3 point, Vector3 direction, Object *&current_obj) {
@@ -85,37 +87,52 @@ Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filte
         if (current_light != nullptr) {
             return current_light->getColor();
         } else {
-            // Random light_direction
             Vector3 normal = current_obj->get_normal(hit_point);
+            // If the normal is not pointing towards the camera, flip it
             if (normal * direction > 0)
                 normal = -normal;
-            // Random
-            std::random_device rd;
-            std::mt19937 gen(rd());
-            std::uniform_real_distribution<> dis(-1, 1);
-            Vector3 light_direction = Vector3(static_cast<float>(dis(gen)), static_cast<float>(dis(gen)),
-                                              static_cast<float>(dis(gen))).normalize();
-            if (light_direction * normal < 0)
-                light_direction = -light_direction;
-            // Compute the filter of the incoming light
-            float d = (pixel - hit_point).norm();
+            // Get the texture of the object
+            TextureMaterial::Texture *texture = current_obj->get_texture(hit_point);
+            if (texture == nullptr) {
+                throw std::logic_error("Texture is null");
+            }
+            // Get the light direction
+            Vector3 light_direction = get_light_direction(direction, normal, texture);
+            float distance = (pixel - hit_point).norm();
             // constant factors for attenuation
             Vector3 k = {0.25, 0.01, 0.001};
             // compute attenuation factor based on distance
-            float attenuation = 1.0f / (k._x + k._y * d + k._z * d * d);
-            Texture_Material::Texture texture = current_obj->get_texture(hit_point);
-            Color filter = (texture.color / 255.0f) * (texture.kd * std::max((normal * light_direction), 0.0f) +
-                                                       texture.ks *
-                                                       (pow(std::max(direction.get_reflection(normal).normalize() *
-                                                                     light_direction, 0.0f),
-                                                            texture.ns))) * attenuation;
+//            float attenuation = 1.0f / (k._x + k._y * distance + k._z * distance * distance);
+            float attenuation = 1.0f;
+            // Compute the filter of the incoming light
+            Color filter = (texture->color / 255.0f) * attenuation *
+                           (texture->kd * std::max((normal * light_direction), 0.0f) +
+                            texture->ks *
+                            (pow(std::max(direction.get_reflection(normal).normalize() *
+                                          light_direction, 0.0f),
+                                 texture->ns)));
             // Get the incoming light
             Color incoming_light = get_pixel_color(hit_point, light_direction, total_filter * filter);
             // Render the object color
-            Color pixel_color = incoming_light * filter;
+            Color pixel_color = (incoming_light + ambient_color) * filter;
             return pixel_color;
         }
-    } catch (std::runtime_error &e) {
+    } catch (std::logic_error &e) {
         return {0, 0, 0};
     }
+}
+
+Vector3 Scene::get_light_direction(Vector3 previous_direction, Vector3 normal, TextureMaterial::Texture *texture) {
+    if (texture->material == Material::MIRROR) {
+        // Mirror reflection
+        return previous_direction.get_reflection(normal).normalize();
+    }
+    // Random
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(-1, 1);
+    Vector3 light_direction = Vector3(static_cast<float>(dis(gen)), static_cast<float>(dis(gen)),
+                                      static_cast<float>(dis(gen))).normalize();
+    // If the light is not pointing towards the normal, flip it
+    return light_direction * normal < 0 ? -light_direction : light_direction;
 }

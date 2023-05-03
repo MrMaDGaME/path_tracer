@@ -24,6 +24,8 @@ public:
 
     Color operator*(const Color &color) const;
 
+    Color proportionnal_product(float f) const;
+
     friend std::ostream &operator<<(std::ostream &os, const Color &color);
 
     float _r, _g, _b;
