@@ -26,7 +26,7 @@ public:
 
     float get_light_hit(Vector3 point, Vector3 direction, Light *&current_light);
 
-    Color get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filter);
+    Color get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filter, float curret_refractive_index);
 
     static Vector3 get_light_direction(Vector3 previous_direction, Vector3 normal, TextureMaterial::Texture *texture);
 

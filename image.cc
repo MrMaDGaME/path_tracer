@@ -37,9 +37,11 @@ void Image::to_ppm(const std::string &path) const {
     map[y * width + x] += color;
 }
 
-[[maybe_unused]] void Image::avegrage_color(unsigned int x, unsigned int y, const Color &color, int n) {
+[[maybe_unused]] void Image::average_color(unsigned int x, unsigned int y, const Color &color, int n) {
     auto nf = static_cast<float>(n);
-    map[y * width + x] = (map[y * width + x] * nf + color) / (nf + 1);
+    map[y * width + x] = {(map[y * width + x]._r * nf + color._r * 2 * static_cast<float>(M_PI)) / (nf + 1),
+                          (map[y * width + x]._g * nf + color._g * 2 * static_cast<float>(M_PI)) / (nf + 1),
+                          (map[y * width + x]._b * nf + color._b * 2 * static_cast<float>(M_PI)) / (nf + 1)};
 }
 
 [[maybe_unused]] void Image::get_max(unsigned int x, unsigned int y, const Color &color) {

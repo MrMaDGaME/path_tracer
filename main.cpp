@@ -15,6 +15,7 @@
 #define HEIGHT 1080
 #define ZMIN 1
 #define MIN_TIME 10
+#define REFRACTION_INDEX_AIR 1.0f
 
 int main() {
     // Variables
@@ -44,8 +45,8 @@ int main() {
     // Objects
     scene.addObject(
             new Plane(0, 1, 0, 0, new UniformTexture(0.1, 0.9, 10, true, Color(100, 255, 100))));
-    scene.addObject(
-            new Plane({-1, 0, 0}, {1, 0, 0}, new UniformTexture(0.1, 0.9, 10, true, Color(255, 255, 255))));
+//    scene.addObject(
+//            new Plane({-1, 0, 0}, {1, 0, 0}, new UniformTexture(0.1, 0.9, 10, true, Color(255, 255, 255))));
     scene.addObject(
             new Plane({10, 0, 2}, {-1, 0, -1}, new UniformTexture(new MirrorTexture())));
     scene.addObject(new Sphere(Vector3(10, 0.5, -2), 0.5,
@@ -73,8 +74,8 @@ int main() {
                 Vector3 pixel = upper_left_corner + right * ((static_cast<float>(i) * pixel_size) + x) +
                                 down * ((static_cast<float>(j) * pixel_size) + y);
                 Color pixel_color = scene.get_pixel_color(pixel, (pixel - camera->center).normalize(),
-                                                          {MAX_COLOR, MAX_COLOR, MAX_COLOR});
-                image.get_max(i, j, pixel_color);
+                                                          {MAX_COLOR, MAX_COLOR, MAX_COLOR}, REFRACTION_INDEX_AIR);
+                image.average_color(i, j, pixel_color, nb_frames);
             }
         }
         nb_frames++;

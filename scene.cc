@@ -74,7 +74,7 @@ float Scene::get_light_hit(Vector3 point, Vector3 direction, Light *&current_lig
     return -1;
 }
 
-Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filter) {
+Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filter, float curret_refractive_index) {
     // If the ray has bounced too many times, no more light is gathered.
     if (total_filter < Color(0.5, 0.5, 0.5))
         return {0, 0, 0};
@@ -112,7 +112,8 @@ Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filte
                                           light_direction, 0.0f),
                                  texture->ns)));
             // Get the incoming light
-            Color incoming_light = get_pixel_color(hit_point, light_direction, total_filter * filter);
+            Color incoming_light = get_pixel_color(hit_point, light_direction, total_filter * filter,
+                                                   curret_refractive_index);
             // Render the object color
             Color pixel_color = (incoming_light + ambient_color) * filter;
             return pixel_color;
