@@ -10,7 +10,7 @@
 #include "lights/plane_light.hh"
 #include "textures/mirror_texture.hh"
 
-#define FOV (120 * M_PI / 180)
+#define FOV (30 * M_PI / 180)
 #define WIDTH 1920
 #define HEIGHT 1080
 #define ZMIN 1
@@ -23,18 +23,18 @@ int main() {
     Vector3 camera_direction(1, 0, 0);
     Vector3 camera_up(0, 1, 0);
     // Camera
-    auto camera = new Camera(camera_center, camera_direction, camera_up, atan(tan(FOV) * HEIGHT / WIDTH) + M_PI / 2,
-                             FOV,
-                             ZMIN);
-    float pixel_size = (2 * tan(camera->alpha / 2) * ZMIN) / WIDTH;
+    auto camera = new Camera(camera_center, camera_direction, camera_up, FOV, ZMIN, WIDTH, HEIGHT);
+    auto height = static_cast<float>(camera->height);
+    auto width = static_cast<float>(camera->width);
+    float pixel_size = (2 * tan(camera->beta / 2) * camera->z) / height;
     Vector3 left(camera->up._y * camera->direction._z - camera->up._z * camera->direction._y,
                  camera->up._x * camera->direction._z - camera->up._z * camera->direction._x,
                  camera->up._x * camera->direction._y - camera->up._y * camera->direction._x);
     Vector3 right = -left;
     Vector3 down = -camera->up;
     Vector3 upper_left_corner =
-            camera->center + camera->up * (pixel_size * (HEIGHT - 1) / 2) + camera->direction * camera->z +
-            left * (pixel_size * (WIDTH - 1) / 2);
+            camera->center + camera->up * (pixel_size * (height - 1) / 2) + camera->direction * camera->z +
+            left * (pixel_size * (width - 1) / 2);
     // Random
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -57,7 +57,7 @@ int main() {
                                new UniformTexture(0.1, 0.9, 10, true, Color(150, 150, 150))));
     // lights
     scene.addLight(new SphereLight(Vector3(10, 1.5, -2), Color(255, 255, 255), 0.5));
-    scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
+//    scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
 //     Image
     std::cout << "Rendering..." << std::endl;
     Image image(WIDTH, HEIGHT);
@@ -67,8 +67,8 @@ int main() {
         /*if (std::time(nullptr) - start > MIN_TIME) {
             break;
         }*/
-        for (int j = 0; j < HEIGHT; j++) {
-            for (int i = 0; i < WIDTH; i++) {
+        for (int j = 0; j < camera->height; j++) {
+            for (int i = 0; i < camera->width; i++) {
                 auto x = static_cast<float>(dis(gen));
                 auto y = static_cast<float>(dis(gen));
                 Vector3 pixel = upper_left_corner + right * ((static_cast<float>(i) * pixel_size) + x) +

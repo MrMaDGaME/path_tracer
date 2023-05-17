@@ -5,5 +5,4 @@
 
 class GlassTexture : public TextureMaterial::Texture {
 public:
-    GlassTexture(float);
 };
