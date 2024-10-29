@@ -3,6 +3,10 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <fstream>
+#include <cstdint>
+#include <stdexcept>
+#include <sstream>
 #include "colors.hh"
 
 class Image {
@@ -20,6 +24,7 @@ public:
     [[maybe_unused]] void get_max(unsigned int x, unsigned int y, const Color &color);
 
 protected:
-    int height, width;
+    int height_, width_;
     std::vector<Color> map;
+
 };

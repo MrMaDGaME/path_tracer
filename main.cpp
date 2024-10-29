@@ -80,7 +80,7 @@ int main() {
         }
         nb_frames++;
         //        image.to_ppm("../results/all_frames/frame" + std::to_string(nb_frames) + ".ppm");
-        image.to_ppm("../results/tmp.ppm");
+        image.to_ppm("..\\results\\tmp.ppm");
         std::cout << "Render time : " << std::time(nullptr) - start << "s" << std::endl;
     }
     //    std::cout << nb_frames << " frames rendered." << std::endl;
