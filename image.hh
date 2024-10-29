@@ -7,7 +7,7 @@
 
 class Image {
 public:
-    Image(int width, int heigth);
+    Image(int width, int height);
 
     void to_ppm(const std::string &path) const;
 
