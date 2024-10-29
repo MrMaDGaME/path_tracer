@@ -45,8 +45,8 @@ int main() {
     // Objects
     scene.addObject(
             new Plane(0, 1, 0, 0, new UniformTexture(0.1, 0.9, 10, true, Color(100, 255, 100))));
-//    scene.addObject(
-//            new Plane({-1, 0, 0}, {1, 0, 0}, new UniformTexture(0.1, 0.9, 10, true, Color(255, 255, 255))));
+    //    scene.addObject(
+    //            new Plane({-1, 0, 0}, {1, 0, 0}, new UniformTexture(0.1, 0.9, 10, true, Color(255, 255, 255))));
     scene.addObject(
             new Plane({10, 0, 2}, {-1, 0, -1}, new UniformTexture(new MirrorTexture())));
     scene.addObject(new Sphere(Vector3(10, 0.5, -2), 0.5,
@@ -57,8 +57,8 @@ int main() {
                                new UniformTexture(0.1, 0.9, 10, true, Color(150, 150, 150))));
     // lights
     scene.addLight(new SphereLight(Vector3(10, 1.5, -2), Color(255, 255, 255), 0.5));
-//    scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
-//     Image
+    //    scene.addLight(new PlaneLight(Vector3(-1, 0, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
+    //     Image
     std::cout << "Rendering..." << std::endl;
     Image image(WIDTH, HEIGHT);
     int nb_frames = 0;
@@ -79,11 +79,11 @@ int main() {
             }
         }
         nb_frames++;
-//        image.to_ppm("../results/all_frames/frame" + std::to_string(nb_frames) + ".ppm");
+        //        image.to_ppm("../results/all_frames/frame" + std::to_string(nb_frames) + ".ppm");
         image.to_ppm("../results/tmp.ppm");
         std::cout << "Render time : " << std::time(nullptr) - start << "s" << std::endl;
     }
-//    std::cout << nb_frames << " frames rendered." << std::endl;
-//    std::cout << "Saving image..." << std::endl;
+    //    std::cout << nb_frames << " frames rendered." << std::endl;
+    //    std::cout << "Saving image..." << std::endl;
     return 0;
 }

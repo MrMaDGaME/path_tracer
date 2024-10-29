@@ -102,7 +102,7 @@ Color Scene::get_pixel_color(Vector3 pixel, Vector3 direction, Color total_filte
             // constant factors for attenuation
             Vector3 k = {0.25, 0.01, 0.001};
             // compute attenuation factor based on distance
-//            float attenuation = 1.0f / (k._x + k._y * distance + k._z * distance * distance);
+            //            float attenuation = 1.0f / (k._x + k._y * distance + k._z * distance * distance);
             float attenuation = 1.0f;
             // Compute the filter of the incoming light
             Color filter = (texture->color / 255.0f) * attenuation *
