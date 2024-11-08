@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
-#include "../objects/object.hh"
+#include "../objects/Object.h"
 
 class ObjectManager {
 public:
-    void addObject(Object *object);
+    void addObject(std::shared_ptr<Object> object);
 
-    [[nodiscard]] const std::vector<Object *> &getObjects() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Object> > &getObjects() const;
 
 private:
-    std::vector<Object *> objects;
+    std::vector<std::shared_ptr<Object> > objects;
 };

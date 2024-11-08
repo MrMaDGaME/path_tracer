@@ -1,9 +1,9 @@
 #include "ObjectManager.h"
 
-void ObjectManager::addObject(Object *object) {
+void ObjectManager::addObject(std::shared_ptr<Object> object) {
     objects.push_back(object);
 }
 
-const std::vector<Object *> &ObjectManager::getObjects() const {
+const std::vector<std::shared_ptr<Object> > &ObjectManager::getObjects() const {
     return objects;
 }

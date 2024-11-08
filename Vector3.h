@@ -19,9 +19,9 @@ public:
 
     float operator*(const Vector3 &v) const;
 
-    Vector3 normalize() const;
+    [[nodiscard]] Vector3 normalize() const;
 
-    float norm() const;
+    [[nodiscard]] float norm() const;
 
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &vector3);
 
@@ -29,5 +29,5 @@ public:
 
     [[nodiscard]] Vector3 cross(const Vector3 &v) const;
 
-    float _x, _y, _z;
+    float x_, y_, z_;
 };

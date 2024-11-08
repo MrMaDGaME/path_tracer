@@ -3,13 +3,13 @@
 #include <random>
 #include "scene/Camera.h"
 #include "scene/Scene.h"
-#include "objects/plane.hh"
-#include "objects/sphere.hh"
 #include "image/Image.h"
-#include "lights/sphere_light.hh"
-#include "lights/plane_light.hh"
-#include "textures/mirror_texture.hh"
+#include "lights/SphereLight.h"
+#include "lights/PlaneLight.h"
+#include "textures/Mirror.h"
 #include "image/ImageExporter.h"
+#include "objects/PlaneObject.h"
+#include "objects/SphereObject.h"
 
 #define FOV (30 * M_PI / 180)
 #define WIDTH 1920
@@ -27,15 +27,22 @@ int main() {
     // Initialisation de la scène
     Scene scene;
 
+    // Ajout des textures
+    auto mirror_texture = std::make_shared<MirrorTexture>();
+    auto ground_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(100, 255, 100));
+    auto trunk_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(139, 69, 19));
+    auto leaf_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(0, 255, 0));
+    auto sky_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(135, 206, 235));
+
     // Ajout des objets
-    scene.addObject(new Plane(0, 1, 0, 0, new UniformTexture(0.1, 0.9, 10, true, Color(100, 255, 100))));
-    scene.addObject(new Plane({10, 0, 2}, {-1, 0, -1}, new UniformTexture(new MirrorTexture())));
-    scene.addObject(new Sphere(Vector3(10, 0.5, -2), 0.5, new UniformTexture(0.9, 0.1, 50, true, Color(0, 0, 255))));
-    scene.addObject(new Sphere(Vector3(10, 2.5, -2), 0.5, new UniformTexture(0.9, 0.1, 50, true, Color(255, 0, 0))));
-    scene.addObject(new Sphere(Vector3(0, 0, 0), 15, new UniformTexture(0.1, 0.9, 10, true, Color(150, 150, 150))));
+    scene.addObject(std::make_shared<PlaneObject>(0, 1, 0, 0, ground_texture));
+    scene.addObject(std::make_shared<PlaneObject>(Vector3(10, 0, 2), Vector3(-1, 0, -1), mirror_texture));
+    scene.addObject(std::make_shared<SphereObject>(Vector3(10, 0.5, -2), 0.5, trunk_texture));
+    scene.addObject(std::make_shared<SphereObject>(Vector3(10, 1.5, -2), 0.5, leaf_texture));
+    scene.addObject(std::make_shared<SphereObject>(Vector3(0, 0, 0), 15, sky_texture));
 
     // Ajout des lumières
-    scene.addLight(new SphereLight(Vector3(10, 1.5, -2), Color(255, 255, 255), 0.5));
+    scene.addLight(std::make_shared<SphereLight>(Vector3(10, 2.5, -2), 0.5, Color(255, 255, 200)));
 
     // Création de l'image
     Image image(WIDTH, HEIGHT);

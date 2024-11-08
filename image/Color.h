@@ -24,6 +24,10 @@ public:
 
     Color operator*(const Color &color) const;
 
+    Color operator*=(const Color &color);
+
+    Color operator*=(float f);
+
     [[maybe_unused]] [[nodiscard]] Color proportionalProduct(float f) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Color &color);

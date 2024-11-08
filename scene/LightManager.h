@@ -1,14 +1,14 @@
 #pragma once
 
 #include <vector>
-#include "../lights/light.hh"
+#include "../lights/Light.h"
 
 class LightManager {
 public:
-    void addLight(Light *light);
+    void addLight(std::shared_ptr<Light> light);
 
-    [[nodiscard]] const std::vector<Light *> &getLights() const;
+    [[nodiscard]] const std::vector<std::shared_ptr<Light>> &getLights() const;
 
 private:
-    std::vector<Light *> lights;
+    std::vector<std::shared_ptr<Light>> lights;
 };

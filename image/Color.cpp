@@ -10,7 +10,7 @@ Color::Color(float r, float g, float b) {
 }
 
 std::ostream &operator<<(std::ostream &os, const Color &color) {
-    os << "r: " << color.r_ << " g: " << color.g_ << " b: " << color.b_;
+    os << "r: " << color.r_ << " g: " << color.g_ << " b_: " << color.b_;
     return os;
 }
 
@@ -66,4 +66,18 @@ float Color::getG() const {
 
 float Color::getB() const {
     return b_;
+}
+
+Color Color::operator*=(const Color &color) {
+    r_ *= color.r_;
+    g_ *= color.g_;
+    b_ *= color.b_;
+    return *this;
+}
+
+Color Color::operator*=(float f) {
+    r_ *= f;
+    g_ *= f;
+    b_ *= f;
+    return *this;
 }

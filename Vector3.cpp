@@ -1,36 +1,36 @@
 #include "Vector3.h"
 
-Vector3::Vector3(float x, float y, float z) : _x(x), _y(y), _z(z) {}
+Vector3::Vector3(float x, float y, float z) : x_(x), y_(y), z_(z) {}
 
-Vector3::Vector3() : _x(0), _y(0), _z(0) {}
+Vector3::Vector3() : x_(0), y_(0), z_(0) {}
 
 Vector3 Vector3::operator*(const float &l) const {
-    return {_x * l, _y * l, _z * l};
+    return {x_ * l, y_ * l, z_ * l};
 }
 
 Vector3 Vector3::operator-(const Vector3 &v) const {
-    return {_x - v._x, _y - v._y, _z - v._z};
+    return {x_ - v.x_, y_ - v.y_, z_ - v.z_};
 }
 
 Vector3 Vector3::operator-() const {
-    return {-_x, -_y, -_z};
+    return {-x_, -y_, -z_};
 }
 
 Vector3 Vector3::operator+(const Vector3 &v) const {
-    return {_x + v._x, _y + v._y, _z + v._z};
+    return {x_ + v.x_, y_ + v.y_, z_ + v.z_};
 }
 
 std::ostream &operator<<(std::ostream &os, const Vector3 &vector3) {
-    os << "_x: " << vector3._x << " _y: " << vector3._y << " _z: " << vector3._z;
+    os << "x_: " << vector3.x_ << " y_: " << vector3.y_ << " z_: " << vector3.z_;
     return os;
 }
 
 float Vector3::operator*(const Vector3 &v) const {
-    return _x * v._x + _y * v._y + _z * v._z;
+    return x_ * v.x_ + y_ * v.y_ + z_ * v.z_;
 }
 
 Vector3 Vector3::normalize() const {
-    return *this * (float) (1.0 / sqrt(_x * _x + _y * _y + _z * _z));
+    return *this * (float) (1.0 / sqrt(x_ * x_ + y_ * y_ + z_ * z_));
 }
 
 Vector3 Vector3::get_reflection(const Vector3 &normal) const {
@@ -38,9 +38,9 @@ Vector3 Vector3::get_reflection(const Vector3 &normal) const {
 }
 
 float Vector3::norm() const {
-    return sqrt(_x * _x + _y * _y + _z * _z);
+    return sqrt(x_ * x_ + y_ * y_ + z_ * z_);
 }
 
 Vector3 Vector3::cross(const Vector3 &v) const {
-    return {_y * v._z - _z * v._y, _z * v._x - _x * v._z, _x * v._y - _y * v._x};
+    return {y_ * v.z_ - z_ * v.y_, z_ * v.x_ - x_ * v.z_, x_ * v.y_ - y_ * v.x_};
 }

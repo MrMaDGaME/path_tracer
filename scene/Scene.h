@@ -13,9 +13,9 @@ class Scene {
 public:
     Scene();
 
-    void addObject(Object *object);
+    void addObject(std::shared_ptr<Object> object);
 
-    void addLight(Light *light);
+    void addLight(std::shared_ptr<Light> light);
 
     Color renderPixel(const Vector3 &pixel, const Vector3 &direction);
 

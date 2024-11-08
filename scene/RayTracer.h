@@ -10,15 +10,14 @@ class RayTracer {
 public:
     RayTracer(ObjectManager &objectManager, LightManager &lightManager);
 
-    Color getPixelColor(const Vector3 &pixel, const Vector3 &direction, const Color &totalFilter,
-                        float currentRefractiveIndex);
+    Color getPixelColor(const Vector3 &pixel, const Vector3 &direction, const Color &totalFilter);
 
 private:
     ObjectManager &objectManager;
     LightManager &lightManager;
 
-    Vector3 getDirectHit(const Vector3 &point, const Vector3 &direction, Object *&currentObj, Light *&currentLight);
-
-    static Vector3
-    getLightDirection(const Vector3 &previousDirection, const Vector3 &normal, TextureMaterial::Texture *texture);
+    Vector3 getDirectHit(const Vector3 &point,
+                         const Vector3 &direction,
+                         std::shared_ptr<Object> &currentObj,
+                         std::shared_ptr<Light> &currentLight);
 };
