@@ -1,14 +1,15 @@
 #pragma once
 
 #include <iostream>
-#include "../colors.hh"
+#include "../image/Color.h"
 #include "material.hh"
 
 class TextureMaterial {
 public:
     struct Texture {
-        Texture(float ks, float kd, float ns, bool is_opaque, const Color &color) : ks(
-                ks), kd(kd), ns(ns), is_opaque(is_opaque), color(color) {}
+        Texture(float ks, float kd, float ns, bool is_opaque, const Color &color) : ks(ks), kd(kd), ns(ns),
+                                                                                    is_opaque(is_opaque),
+                                                                                    color(color) {}
 
         Texture(float ks, float kd, float ns, bool isOpaque, const Color &color, Material material) : ks(ks), kd(kd),
                                                                                                       ns(ns), is_opaque(

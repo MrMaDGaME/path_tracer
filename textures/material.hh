@@ -3,7 +3,5 @@
 #include <iostream>
 
 enum Material {
-    DEFAULT,
-    MIRROR,
-    GLASS,
+    DEFAULT, MIRROR, GLASS,
 };

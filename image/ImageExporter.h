@@ -1,0 +1,11 @@
+#pragma once
+
+#include <string>
+#include <fstream>
+#include <sstream>
+#include "Image.h"
+
+class ImageExporter {
+public:
+    static void exportToPpm(const Image &image, const std::string &path);
+};

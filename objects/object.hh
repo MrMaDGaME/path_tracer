@@ -3,7 +3,7 @@
 #include <iostream>
 #include "../textures/texture_material.hh"
 #include "../textures/uniform_texture.hh"
-#include "../vector_3.hh"
+#include "../Vector3.h"
 
 class Object {
 public:

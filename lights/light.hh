@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "../vector_3.hh"
-#include "../colors.hh"
+#include "../Vector3.h"
+#include "../image/Color.h"
 
 class Light {
 public :
@@ -10,7 +10,7 @@ public :
 
     virtual ~Light() = default;
 
-    Color getColor() const {
+    [[nodiscard]] Color getColor() const {
         return color;
     }
 

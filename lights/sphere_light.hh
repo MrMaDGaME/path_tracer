@@ -1,8 +1,8 @@
 #pragma once
 
 #include <iostream>
-#include "../vector_3.hh"
-#include "../colors.hh"
+#include "../Vector3.h"
+#include "../image/Color.h"
 #include "light.hh"
 #include "../objects/sphere.hh"
 

@@ -1,4 +1,4 @@
-#include "vector_3.hh"
+#include "Vector3.h"
 
 Vector3::Vector3(float x, float y, float z) : _x(x), _y(y), _z(z) {}
 
@@ -39,4 +39,8 @@ Vector3 Vector3::get_reflection(const Vector3 &normal) const {
 
 float Vector3::norm() const {
     return sqrt(_x * _x + _y * _y + _z * _z);
+}
+
+Vector3 Vector3::cross(const Vector3 &v) const {
+    return {_y * v._z - _z * v._y, _z * v._x - _x * v._z, _x * v._y - _y * v._x};
 }

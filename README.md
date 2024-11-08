@@ -1,1 +1,1 @@
-# path_tracer
+# Path Tracer

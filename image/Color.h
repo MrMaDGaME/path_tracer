@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-#define MAX_COLOR 255.0f
+#define MAX_COLOR 255.f
 
 class Color {
 public:
-    Color() : _r(0), _g(0), _b(0) {}
+    Color();
 
     Color(float r, float g, float b);
 
@@ -24,9 +24,16 @@ public:
 
     Color operator*(const Color &color) const;
 
-    Color proportionnal_product(float f) const;
+    [[maybe_unused]] [[nodiscard]] Color proportionalProduct(float f) const;
 
     friend std::ostream &operator<<(std::ostream &os, const Color &color);
 
-    float _r, _g, _b;
+    [[nodiscard]] float getR() const;
+
+    [[nodiscard]] float getG() const;
+
+    [[nodiscard]] float getB() const;
+
+protected:
+    float r_, g_, b_;
 };

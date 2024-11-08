@@ -25,7 +25,9 @@ public:
 
     friend std::ostream &operator<<(std::ostream &os, const Vector3 &vector3);
 
-    Vector3 get_reflection(const Vector3 &normal) const;
+    [[nodiscard]] Vector3 get_reflection(const Vector3 &normal) const;
+
+    [[nodiscard]] Vector3 cross(const Vector3 &v) const;
 
     float _x, _y, _z;
 };

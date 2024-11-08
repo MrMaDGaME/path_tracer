@@ -1,8 +1,7 @@
 #include "sphere.hh"
 #include <cmath>
 
-Sphere::Sphere(const Vector3 &center, float radius, TextureMaterial *texture) : Object(texture),
-                                                                                center(center),
+Sphere::Sphere(const Vector3 &center, float radius, TextureMaterial *texture) : Object(texture), center(center),
                                                                                 radius(radius) {}
 
 float square(float x) {
@@ -25,8 +24,8 @@ float sphere_raycast_hit(Vector3 point, Vector3 direction, Vector3 center, float
     float a = square(direction._x) + square(direction._y) + square(direction._z);
     float b = 2 * (direction._x * (point._x - center._x) + direction._y * (point._y - center._y) +
                    direction._z * (point._z - center._z));
-    float c = square(point._x - center._x) + square(point._y - center._y) +
-              square(point._z - center._z) - square(radius);
+    float c =
+            square(point._x - center._x) + square(point._y - center._y) + square(point._z - center._z) - square(radius);
     float delta = square(b) - 4 * a * c;
     if (delta < 0.0f)
         return -1;
