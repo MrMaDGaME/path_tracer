@@ -58,7 +58,7 @@ int main() {
     }
 
     // Sauvegarde de l'image
-    ImageExporter::exportToPpm(image, "../results/rendered_scene.ppm");
+    ImageExporter::exportToPng(image, "../results/rendered_scene.png");
     std::cout << "Rendering complete. Image saved to ../results/rendered_scene.ppm" << std::endl;
 
     return 0;
