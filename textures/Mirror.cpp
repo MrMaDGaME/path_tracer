@@ -4,3 +4,7 @@ void MirrorTexture::reflect(Vector3 point, Vector3 direction, Vector3 normal, Ve
     filter = Color(1, 1, 1);
     lightDirection = direction.get_reflection(normal);
 }
+
+Color MirrorTexture::getColor(Vector3 point) {
+    return {0, 0, 0};
+}

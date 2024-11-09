@@ -2,13 +2,12 @@
 #include <stdexcept>
 
 #define EPSILON 0.0001f
+#define AMBIENT_LIGHT 0.f
 
-RayTracer::RayTracer(ObjectManager &objectManager, LightManager &lightManager)
-        : objectManager(objectManager), lightManager(lightManager) {}
+RayTracer::RayTracer(ObjectManager &objectManager, LightManager &lightManager) : objectManager(objectManager),
+                                                                                 lightManager(lightManager) {}
 
-Vector3 RayTracer::getDirectHit(const Vector3 &point,
-                                const Vector3 &direction,
-                                std::shared_ptr<Object> &currentObj,
+Vector3 RayTracer::getDirectHit(const Vector3 &point, const Vector3 &direction, std::shared_ptr<Object> &currentObj,
                                 std::shared_ptr<Light> &currentLight) {
     std::shared_ptr<Object> tmpObj = nullptr;
     std::shared_ptr<Light> tmpLight = nullptr;
@@ -70,7 +69,7 @@ Color RayTracer::getPixelColor(const Vector3 &pixel, const Vector3 &direction, c
             currentObj->getMaterial()->reflect(hitPoint, direction, normal, lightDirection, filter);
             // Recursive call for light tracing
             Color incomingLight = getPixelColor(hitPoint, lightDirection, totalFilter * filter);
-            return (incomingLight * filter);
+            return incomingLight * filter;
         }
     } catch (std::logic_error &e) {
         return {0, 0, 0};

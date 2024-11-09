@@ -17,7 +17,7 @@ public:
 
     void addLight(std::shared_ptr<Light> light);
 
-    Color renderPixel(const Vector3 &pixel, const Vector3 &direction);
+    Color renderPixel(const Vector3 &pixel, const Vector3 &direction, float maxColor);
 
 private:
     ObjectManager objectManager;

@@ -19,7 +19,7 @@ Color Color::operator*(const float f) const {
 }
 
 Color Color::operator+(const Color &color) const {
-    return {r_ + color.r_, g_ + color.g_, b_ + color.b_};
+    return {std::max(r_, color.r_), std::max(g_, color.g_), std::max(b_, color.b_)};
 }
 
 Color Color::operator/(float f) const {
@@ -27,12 +27,9 @@ Color Color::operator/(float f) const {
 }
 
 Color Color::operator+=(const Color &color) {
-    r_ += color.r_;
-    g_ += color.g_;
-    b_ += color.b_;
-    r_ = std::min(r_, MAX_COLOR);
-    g_ = std::min(g_, MAX_COLOR);
-    b_ = std::min(b_, MAX_COLOR);
+    r_ = std::max(r_, color.r_);
+    g_ = std::max(g_, color.g_);
+    b_ = std::max(b_, color.b_);
     return *this;
 }
 
