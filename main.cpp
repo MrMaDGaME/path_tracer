@@ -28,7 +28,7 @@ int main() {
 
     // Ajout des textures
     auto mirror_texture = std::make_shared<MirrorTexture>();
-    auto ground_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(100, 255, 100));
+    auto ground_texture = std::make_shared<UniformTexture>(0.9, 0.9, 100, Color(100, 100, 100));
     auto trunk_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(139, 69, 19));
     auto leaf_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(0, 255, 0));
     auto sky_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(135, 206, 235));
