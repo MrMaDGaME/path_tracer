@@ -6,8 +6,8 @@ Camera::Camera(const Vector3 &center, const Vector3 &direction, const Vector3 &u
           height(height) {
 
     // Calcul des vecteurs horizontal et vertical
-    horizontal = (this->direction.cross(this->up)).normalize();
-    vertical = (horizontal.cross(this->direction)).normalize();
+    horizontal = (this->up.cross(this->direction)).normalize();
+    vertical = up.normalize();
 
     // Calcul de la taille d'un pixel
     float viewport_height = 2 * tan(beta / 2);

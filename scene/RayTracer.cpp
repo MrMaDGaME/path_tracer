@@ -2,7 +2,7 @@
 #include <stdexcept>
 
 #define EPSILON 0.0001f
-#define AMBIENT_LIGHT 0.f
+#define AMBIENT_LIGHT 0.1f
 
 RayTracer::RayTracer(ObjectManager &objectManager, LightManager &lightManager) : objectManager(objectManager),
                                                                                  lightManager(lightManager) {}
@@ -69,7 +69,7 @@ Color RayTracer::getPixelColor(const Vector3 &pixel, const Vector3 &direction, c
             currentObj->getMaterial()->reflect(hitPoint, direction, normal, lightDirection, filter);
             // Recursive call for light tracing
             Color incomingLight = getPixelColor(hitPoint, lightDirection, totalFilter * filter);
-            return incomingLight * filter;
+            return incomingLight * filter + currentObj->getMaterial()->getColor(hitPoint) * AMBIENT_LIGHT;
         }
     } catch (std::logic_error &e) {
         return {0, 0, 0};

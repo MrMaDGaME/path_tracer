@@ -11,7 +11,7 @@
 #include "objects/PlaneObject.h"
 #include "objects/SphereObject.h"
 
-#define FOV (30 * M_PI / 180)
+#define FOV (90 * M_PI / 180)
 #define WIDTH 1920
 #define HEIGHT 1080
 #define MAX_COLOR 255.f
@@ -19,7 +19,7 @@
 int main() {
     // Initialisation de la caméra
     Vector3 camera_center(0, 1, 0);
-    Vector3 camera_direction(1, 0, 0);
+    Vector3 camera_direction(0, 0, 1);
     Vector3 camera_up(0, 1, 0);
     Camera camera(camera_center, camera_direction, camera_up, FOV, WIDTH, HEIGHT);
 
@@ -27,22 +27,23 @@ int main() {
     Scene scene;
 
     // Ajout des textures
-    auto mirror_texture = std::make_shared<MirrorTexture>();
-    auto ground_texture = std::make_shared<UniformTexture>(0.9, 0.9, 100, Color(100, 100, 100));
     auto trunk_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(139, 69, 19));
     auto leaf_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(0, 255, 0));
     auto sky_texture = std::make_shared<UniformTexture>(0.1, 0.9, 10, Color(135, 206, 235));
+    auto ground_texture = std::make_shared<UniformTexture>(0.5, 0.1, 200, Color(250, 250, 250));
+    auto wall_texture = std::make_shared<UniformTexture>(0.5, 0.5, 10, Color(255, 255, 230));
 
-    // Ajout des objets
-    scene.addObject(std::make_shared<PlaneObject>(0, 1, 0, 0, ground_texture));
-    scene.addObject(std::make_shared<PlaneObject>(Vector3(10, 0, 2), Vector3(-1, 0, -1), mirror_texture));
-    scene.addObject(std::make_shared<SphereObject>(Vector3(10, 0.5, -2), 0.5, trunk_texture));
-    scene.addObject(std::make_shared<SphereObject>(Vector3(10, 1.5, -2), 0.5, leaf_texture));
-    scene.addObject(std::make_shared<SphereObject>(Vector3(0, 0, 0), 15, sky_texture));
+    scene.addObject(std::make_shared<SphereObject>(Vector3(2, 1, 3), 0.5, trunk_texture));
+    scene.addObject(std::make_shared<SphereObject>(Vector3(-2, 1, 3), 0.5, leaf_texture));
+    scene.addObject(std::make_shared<PlaneObject>(Vector3(0, 0, 0), Vector3(0, 1, 0), ground_texture)); // Sol
+    scene.addObject(std::make_shared<PlaneObject>(Vector3(-3, 0, 0), Vector3(1, 0, 0), wall_texture)); // Mur gauche
+    scene.addObject(std::make_shared<PlaneObject>(Vector3(3, 0, 0), Vector3(-1, 0, 0), wall_texture)); // Mur droit
+    scene.addObject(std::make_shared<PlaneObject>(Vector3(0, 0, 5), Vector3(0, 0, -1), wall_texture)); // Mur arrière
+    scene.addObject(std::make_shared<PlaneObject>(Vector3(0, 2, 0), Vector3(0, -1, 0), wall_texture)); // Plafond
 
     // Ajout des lumières
-    scene.addLight(std::make_shared<SphereLight>(Vector3(10, 2.5, -2), 0.5, Color(255, 255, 200)));
-    scene.addLight(std::make_shared<PlaneLight>(Vector3(-1, 1, 0), Vector3(1, 0, 0), Color(255, 255, 255)));
+    scene.addLight(std::make_shared<PlaneLight>(Vector3(0, 0, -1), Vector3(0, 0, 1), Color(255, 255, 255)));
+    scene.addLight(std::make_shared<SphereLight>(Vector3(0, 1, 3), 0.5, Color(255, 255, 255)));
 
     // Création de l'image
     Image image(WIDTH, HEIGHT);
@@ -63,7 +64,7 @@ int main() {
             }
         }
         nb_frames++;
-        ImageExporter::exportToPng(image, "../results/rendered_scene.png");
+        ImageExporter::exportToPng(image, "../results/rendered_scene2.png");
         std::cout << "Render time : " << std::time(nullptr) - start << "s" << std::endl;
     }
 
